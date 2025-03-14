@@ -19,9 +19,11 @@ public class Enemy : MonoBehaviour
     private List<Vector3> currentPath; // Đường đi A* hiện tại
     private int currentWaypoint; // Điểm đến tiếp theo trong đường đi
     private GridManager gridManager; // Tham chiếu đến GridManager
+    private BoxOpening boxOpening;
 
     void Start()
     {
+        boxOpening = FindAnyObjectByType<BoxOpening>();
         animator = GetComponent<Animator>(); // Lấy component Animator
         gridManager = FindObjectOfType<GridManager>(); // Tìm GridManager trong scene
 
@@ -33,6 +35,17 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
+        if (boxOpening.PlayerIsHiding())
+        {
+            chaseRange = 0;
+            returnRange = 0;
+        }
+        else
+        {
+            chaseRange = 5f;
+            returnRange = 7f;
+        }
+
         if (GameManager.Instance.isChestOpened) // Nếu rương đã mở, tăng phạm vi phát hiện
         {
             chaseRange = 20f;

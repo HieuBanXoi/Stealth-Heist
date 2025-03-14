@@ -4,42 +4,56 @@ using UnityEngine;
 
 public class ChestOpening : MonoBehaviour
 {
-    private bool isPlayerNearBy = false; // Kiểm tra xem player có ở gần rương không
-    private Animator animator; // Điều khiển animation của rương
-    private GameManager gameManager; // Tham chiếu đến GameManager
-
+    private bool isPlayerNearBy = false;
+    private Animator animator;
+    private GameManager gameManager;
+    [SerializeField] private GameObject canvasText;
+    [SerializeField] private int numberOfKeysToOpen;
     void Awake()
     {
-        gameManager = FindAnyObjectByType<GameManager>(); // Tìm GameManager trong scene
+        gameManager = FindAnyObjectByType<GameManager>();
     }
-
+    // Start is called before the first frame update
     void Start()
     {
-        animator = GetComponent<Animator>(); // Lấy component Animator của rương
+        canvasText.SetActive(false);
+        animator = GetComponent<Animator>();
     }
 
+    // Update is called once per frame
     void Update()
     {
-        if (isPlayerNearBy && Input.GetKeyDown(KeyCode.Space)) // Nếu player ở gần và nhấn Space
+        if (isPlayerNearBy && Input.GetKeyDown(KeyCode.Space))
         {
-            animator.SetBool("OpenBox", true); // Bật animation mở rương
+            if (numberOfKeysToOpen <= gameManager.numberOfKeys)
+            {
+                animator.SetBool("CanOpen", true);
+                GameManager.Instance.isChestOpened = true; // Thông báo rằng rương đã mở
+            }
+            else
+            {
+                canvasText.SetActive(true);
+                StartCoroutine(HideTextAfterSeconds(3f));
+            }
         }
     }
-
-
+    IEnumerator HideTextAfterSeconds(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        canvasText.SetActive(false);
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player")) // Nếu player chạm vào rương
+        if (collision.CompareTag("Player"))
         {
-            isPlayerNearBy = true; // Cập nhật trạng thái player ở gần rương
+            isPlayerNearBy = true;
         }
     }
-
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player")) // Nếu player rời khỏi rương
+        if (collision.CompareTag("Player"))
         {
-            isPlayerNearBy = false; // Cập nhật trạng thái player rời đi
+            isPlayerNearBy = false;
         }
     }
 }
