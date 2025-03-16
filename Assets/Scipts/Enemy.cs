@@ -51,20 +51,15 @@ public class Enemy : MonoBehaviour
             chaseRange = 20f;
             returnRange = 30f;
         }
-
+        MoveAlongPath();
         if (isChasing)
         {
             ChasePlayer(); // Đuổi theo người chơi
         }
-        else
-        {
-            FollowPatrolPath(); // Tuần tra theo lộ trình
-        }
-
         UpdateAnimation(); // Cập nhật animation
     }
 
-    private void FollowPatrolPath()
+    private void MoveAlongPath()
     {
         if (currentPath == null || currentWaypoint >= currentPath.Count) return; // Nếu không có đường đi hoặc đã đến cuối đường đi
 
@@ -78,15 +73,6 @@ public class Enemy : MonoBehaviour
 
     private void ChasePlayer()
     {
-        if (currentPath == null || currentWaypoint >= currentPath.Count) return; // Nếu không có đường đi hoặc đã đến cuối
-
-        transform.position = Vector3.MoveTowards(transform.position, currentPath[currentWaypoint], speed * Time.deltaTime); // Di chuyển đến player
-
-        if (Vector3.Distance(transform.position, currentPath[currentWaypoint]) < 0.1f) // Nếu đến gần waypoint, chuyển sang waypoint tiếp theo
-        {
-            currentWaypoint++;
-        }
-
         if (Vector3.Distance(transform.position, player.position) > returnRange) // Nếu player thoát khỏi phạm vi, quay lại tuần tra
         {
             isChasing = false;
