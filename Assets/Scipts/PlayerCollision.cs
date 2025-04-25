@@ -21,4 +21,13 @@ public class PlayerCollision : MonoBehaviour
             gameManager.GameOver();
         }
     }
+    // Tăng tốc khi nhạtư được thuốc tăng tốc
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("SpeedUp"))
+        {
+            FindAnyObjectByType<PlayerController>().SpeedUp();
+            Destroy(collision.gameObject);
+        }
+    }
 }

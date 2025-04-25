@@ -8,8 +8,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Transform pointB; // Điểm tuần tra B
     [SerializeField] private float speed; // Tốc độ di chuyển của enemy
     [SerializeField] private Transform player; // Tham chiếu đến player
-    [SerializeField] private float chaseRange = 5f; // Phạm vi phát hiện player
-    [SerializeField] private float returnRange = 7f; // Khoảng cách để quay lại tuần tra
+    [SerializeField] private float defaultChaseRange; // Phạm vi phát hiện player
+    [SerializeField] private float defaultReturnRange; // Khoảng cách để quay lại tuần tra
     [SerializeField] private float updatePathInterval = 1f; // Thời gian cập nhật đường đi
 
     private Animator animator; // Điều khiển animation của enemy
@@ -19,11 +19,13 @@ public class Enemy : MonoBehaviour
     private List<Vector3> currentPath; // Đường đi A* hiện tại
     private int currentWaypoint; // Điểm đến tiếp theo trong đường đi
     private GridManager gridManager; // Tham chiếu đến GridManager
-    private BoxOpening boxOpening;
+    private float chaseRange;
+    private float returnRange;
 
     void Start()
     {
-        boxOpening = FindAnyObjectByType<BoxOpening>();
+        chaseRange = defaultChaseRange;
+        returnRange = defaultReturnRange;
         animator = GetComponent<Animator>(); // Lấy component Animator
         gridManager = FindObjectOfType<GridManager>(); // Tìm GridManager trong scene
 
@@ -35,21 +37,21 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        if (boxOpening.PlayerIsHiding())
+        if (GameManager.Instance.isPlayerHiding)
         {
             chaseRange = 0;
             returnRange = 0;
         }
         else
         {
-            chaseRange = 5f;
-            returnRange = 7f;
+            chaseRange = defaultChaseRange;
+            returnRange = defaultReturnRange;
         }
 
         if (GameManager.Instance.isChestOpened) // Nếu rương đã mở, tăng phạm vi phát hiện
         {
-            chaseRange = 20f;
-            returnRange = 30f;
+            defaultChaseRange = 20f;
+            defaultReturnRange = 30f;
         }
         MoveAlongPath();
         if (isChasing)
@@ -80,19 +82,6 @@ public class Enemy : MonoBehaviour
             StartCoroutine(Patrol());
         }
     }
-
-    private void UpdateAnimation()
-    {
-        Vector3 moveDirection = (isChasing && currentPath != null && currentWaypoint < currentPath.Count) // Nếu đang đuổi theo
-            ? (currentPath[currentWaypoint] - transform.position).normalized
-            : (currentPath != null && currentWaypoint < currentPath.Count) // Nếu đang tuần tra
-            ? (currentPath[currentWaypoint] - transform.position).normalized
-            : Vector3.zero;
-
-        animator.SetFloat("moveX", moveDirection.x); // Cập nhật hướng di chuyển X
-        animator.SetFloat("moveY", moveDirection.y); // Cập nhật hướng di chuyển Y
-    }
-
     private IEnumerator UpdatePath()
     {
         while (true)
@@ -101,6 +90,7 @@ public class Enemy : MonoBehaviour
 
             if (distanceToPlayer <= chaseRange) // Nếu player trong phạm vi, bắt đầu đuổi theo
             {
+                updatePathInterval = 1f;
                 isChasing = true;
                 Vector3Int startCell = gridManager.groundTilemap.WorldToCell(transform.position); // Chuyển vị trí hiện tại về tọa độ cell
                 Vector3Int targetCell = gridManager.groundTilemap.WorldToCell(player.position); // Chuyển vị trí player về tọa độ cell
@@ -115,8 +105,10 @@ public class Enemy : MonoBehaviour
             }
             else if (distanceToPlayer > returnRange && isChasing) // Nếu player thoát ra khỏi returnRange, quay lại tuần tra
             {
+                updatePathInterval = 3f;
                 isChasing = false;
                 currentPath = null;
+                yield return new WaitForSeconds(2f);   // Chờ 2 giây trước khi quay lại tuần tra
                 StartCoroutine(Patrol());
             }
 
@@ -154,13 +146,23 @@ public class Enemy : MonoBehaviour
         }
         return worldPath;
     }
+    private void UpdateAnimation()
+    {
+        Vector3 moveDirection = (isChasing && currentPath != null && currentWaypoint < currentPath.Count) // Nếu đang đuổi theo
+            ? (currentPath[currentWaypoint] - transform.position).normalized
+            : (currentPath != null && currentWaypoint < currentPath.Count) // Nếu đang tuần tra
+            ? (currentPath[currentWaypoint] - transform.position).normalized
+            : Vector3.zero;
 
+        animator.SetFloat("moveX", moveDirection.x); // Cập nhật hướng di chuyển X
+        animator.SetFloat("moveY", moveDirection.y); // Cập nhật hướng di chuyển Y
+    }
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red; // Màu đỏ hiển thị phạm vi đuổi theo
-        Gizmos.DrawWireSphere(transform.position, chaseRange);
+        Gizmos.DrawWireSphere(transform.position, defaultChaseRange);
 
         Gizmos.color = Color.blue; // Màu xanh hiển thị phạm vi quay lại tuần tra
-        Gizmos.DrawWireSphere(transform.position, returnRange);
+        Gizmos.DrawWireSphere(transform.position, defaultReturnRange);
     }
 }

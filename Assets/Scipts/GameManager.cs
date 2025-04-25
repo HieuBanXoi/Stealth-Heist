@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     private bool isGameOver = false; // Trạng thái game có kết thúc hay chưa
     public static GameManager Instance { get; private set; } // Singleton để truy cập GameManager từ các script khác
     public bool isChestOpened = false; // Kiểm tra xem rương đã được mở chưa
+    public bool isPlayerHiding = false; // Kiểm tra xem player có đang trốn không
 
     private void Awake()
     {

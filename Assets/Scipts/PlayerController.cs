@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 5f;  // Tốc độ di chuyển của nhân vật
+    [SerializeField] public float moveSpeed = 1500f;  // Tốc độ di chuyển của nhân vật
     private Rigidbody2D rb;  // Tham chiếu đến Rigidbody2D để xử lý vật lý
     private Animator animator;  // Tham chiếu đến Animator để cập nhật animation
     private Vector2 movement;  // Vector lưu trữ hướng di chuyển
@@ -47,5 +47,18 @@ public class PlayerController : MonoBehaviour
 
         // Kiểm tra nếu nhân vật đang di chuyển (magnitude > 0)
         animator.SetBool("isMoving", movement.magnitude > 0);
+    }
+    public void SpeedUp()
+    {
+        StartCoroutine(SpeedBoostCoroutine());
+    }
+    private IEnumerator SpeedBoostCoroutine()
+    {
+        float originalSpeed = moveSpeed; // Lưu lại tốc độ gốc
+        moveSpeed *= 2f; // Tăng tốc độ lên gấp đôi
+
+        yield return new WaitForSeconds(10f); // Chờ 10 giây
+
+        moveSpeed = originalSpeed; // Khôi phục tốc độ ban đầu
     }
 }
