@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33d438d8cfb0da94c80ecf5605b18991, type: 3}
   m_Name: Question 3
   m_EditorClassIdentifier: 
-  question: 1
+  question: "N\u01B0\u1EDBc \u0111\xF3ng b\u0103ng \u1EDF nhi\u1EC7t \u0111\u1ED9
+    bao nhi\xEAu?"
+  questionImage: {fileID: 21300000, guid: 88e23071a2b07184db9127dcd03b9270, type: 3}
   answer:
-  - 0
-  - 0
-  - 1
-  - 0
-  correctAnswer: 2
+  - "100\xB0C"
+  - "-5\xB0C"
+  - "-10\xB0C"
+  - "32\xB0F"
+  correctAnswer: 3

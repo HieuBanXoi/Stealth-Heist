@@ -15,7 +15,7 @@ public class PlayerCollision : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         // Kiểm tra nếu va chạm với đối tượng có tag "Enemy"
-        if (collision.gameObject.CompareTag("Enemy"))
+        if (collision.gameObject.CompareTag("Trap"))
         {
             // Gọi hàm GameOver() từ GameManager khi người chơi chạm vào kẻ địch
             gameManager.GameOver();
@@ -29,5 +29,15 @@ public class PlayerCollision : MonoBehaviour
             FindAnyObjectByType<PlayerController>().SpeedUp();
             Destroy(collision.gameObject);
         }
+        if (collision.CompareTag("Invisible"))
+        {
+            FindAnyObjectByType<PlayerController>().Invisible();
+            Destroy(collision.gameObject);
+        }
+        if (collision.CompareTag("Enemy"))
+        {
+            gameManager.GameOver();
+        }
     }
+
 }

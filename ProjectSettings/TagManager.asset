@@ -8,6 +8,9 @@ TagManager:
   - Chest
   - Key
   - SpeedUp
+  - Invisible
+  - Trap
+  - Audio
   layers:
   - Default
   - TransparentFX
@@ -48,17 +51,17 @@ TagManager:
   - name: Ground
     uniqueID: 4260026717
     locked: 0
-  - name: Enemy
-    uniqueID: 599035203
-    locked: 0
   - name: Item
     uniqueID: 350442839
     locked: 0
-  - name: Player
-    uniqueID: 3406971823
+  - name: Enemy
+    uniqueID: 599035203
     locked: 0
   - name: Wall
     uniqueID: 1803978269
+    locked: 0
+  - name: Player
+    uniqueID: 3406971823
     locked: 0
   - name: UI
     uniqueID: 3160897795

@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33d438d8cfb0da94c80ecf5605b18991, type: 3}
   m_Name: Question 1
   m_EditorClassIdentifier: 
-  question: What is this game ?
+  question: "Tr\xF2 ch\u01A1i n\xE0y c\xF3 t\xEAn?"
+  questionImage: {fileID: 21300000, guid: e168a06277176b3428df4705c71a7e0a, type: 3}
   answer:
   - Money Heist
   - Stealth Heist

@@ -5,7 +5,6 @@ public static class AStar
 {
     public static List<Vector3Int> FindPath(Vector3Int start, Vector3Int target, GridManager gridManager)
     {
-        // Sử dụng PriorityQueue cho openList (C# 10+ có sẵn, nếu dùng version cũ hơn cần tự implement)
         PriorityQueue<Node, int> openList = new PriorityQueue<Node, int>();
         HashSet<Vector3Int> closedList = new HashSet<Vector3Int>();
         Dictionary<Vector3Int, Node> nodeTracker = new Dictionary<Vector3Int, Node>(); // Theo dõi node để cập nhật
@@ -40,7 +39,7 @@ public static class AStar
                 {
                     neighborNode.gCost = newGCost;
                     neighborNode.parent = currentNode;
-                    openList.Enqueue(neighborNode, neighborNode.FCost); // Cần re-enqueue để cập nhật priority
+                    openList.Enqueue(neighborNode, neighborNode.FCost); 
                 }
             }
         }

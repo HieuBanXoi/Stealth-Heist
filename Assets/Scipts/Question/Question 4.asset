@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33d438d8cfb0da94c80ecf5605b18991, type: 3}
   m_Name: Question 4
   m_EditorClassIdentifier: 
-  question: hello
+  question: "M\u1EB7t Tr\u0103ng quay quanh Tr\xE1i \u0110\u1EA5t m\u1EA5t bao l\xE2u?"
+  questionImage: {fileID: 21300000, guid: b2b363d8865a01249a59bee5f102aee9, type: 3}
   answer:
-  - hello
-  - ' '
-  - ' '
-  - ' '
-  correctAnswer: 0
+  - "24 gi\u1EDD"
+  - "7 ng\xE0y"
+  - "29,5 ng\xE0y"
+  - "365 ng\xE0y"
+  correctAnswer: 2

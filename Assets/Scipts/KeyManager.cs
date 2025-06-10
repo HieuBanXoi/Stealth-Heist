@@ -100,4 +100,8 @@ public class KeyManager : MonoBehaviour
         timeValue = timeToReturnKey;
         timeOver = false;
     }
+    public void SetQuestion(QuestionManager newQuestion)
+    {
+        question = newQuestion;
+    }
 }
